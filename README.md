@@ -1,1 +1,1 @@
-# solar-searchers
+# Project Solar Searcher
