@@ -1,1 +1,3 @@
 # Project Solar Searcher
+
+# Abstract
