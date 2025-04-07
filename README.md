@@ -29,3 +29,9 @@ Col: As most of the learning in class thus far has focussed on classification, I
 
 Omar: I’m planning on learning more about data processing and cleaning (as we likely will need to compile data from a variety of sources) as well as learning how to pull data from the google API. It will be interesting to explore packages like GeoPandas for creating our heatmaps and using our model to predict energy output at locations without any existing data.
 
+Noah: I’m looking forward to learning about algorithms and data pipelines as solutions to complex problems. In particular, I’m interested to see how our work on solar energy can be re-tooled or otherwise translated to perform predictions in the fields of wind or hydro energy. I’m also excited to see how we can take topographical data and translate it into effective features.
+
+## Risk Statement
+The most significant potential obstacle in our path to successfully implementing this project is the data. In order to make accurate and meaningful predictions about potential energy output for a theoretical plant, we will need to develop a strong understanding of the factors at play in generating renewable energy. To account for this difficulty, we have already identified several potential datasets, but we have also discussed multiple options for applicable models in this scenario. The optimal features may not be the same for all possible models, so if our data is not yielding the patterns we expected, we can be flexible and experiment with different means of prediction.
+
+Another potential obstacle is compute power. Given that we plan to include a heatmap in our final deliverable, we will need to apply our model to a very wide dataset. To account for this problem, we have access to powerful lab computers in both the computer science and physics departments, on which we can run our most intensive experiments to generate our final reports.
