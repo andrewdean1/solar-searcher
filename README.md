@@ -26,3 +26,6 @@ The primary resource required will be data regarding the three renewable energy 
 
 ## What We Will Learn
 Col: As most of the learning in class thus far has focussed on classification, I’m excited to learn more about regression tasks and the corresponding ML models/techniques.  In addition to this, I’m looking forward to learning more about and gaining more hands-on experience scraping data from public online sources.  I feel that these learning opportunities will develop my understanding of how ML theory and abstract software tools can be harnessed to tackle complex, empirical problems.
+
+Omar: I’m planning on learning more about data processing and cleaning (as we likely will need to compile data from a variety of sources) as well as learning how to pull data from the google API. It will be interesting to explore packages like GeoPandas for creating our heatmaps and using our model to predict energy output at locations without any existing data.
+
