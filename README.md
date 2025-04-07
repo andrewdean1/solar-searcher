@@ -44,3 +44,17 @@ Renewable energy output can be predicted based on topographical, geological, and
 Developing theoretical means of measurement for green energy will make its implementation more robust.
 The world is a better place when our energy sources are not harmful to the planet.
 
+## Tentative Timeline
+By Week 3:
+- Establish a working data acquisition and processing pipeline from NASA, GitHub, Kaggle, and Google Earth sources.
+- Complete initial exploratory data analysis and feature extraction to validate data quality and refine our goals. 
+- Develop a basic regression model prototype that can predict solar energy output on a small, representative dataset – demonstrating “something that works.”
+
+By Week 6:
+- Refine and scale up the regression model using the full dataset, integrating additional relevant features such as elevation and terrain type from Google Maps.
+- Produce preliminary heatmaps to visualize predicted energy outputs across selected regions of the US.
+- Potentially begin incorporating solar analysis with wind and hydro energy data to evaluate optimal energy sources
+- Or, further scale and solidify the usage of our solar model and build a simple interactive app, allowing users to input parameters (for example, lat and long coordinates) and instantly visualize tailored energy output predictions
+
+
+This phased approach will ensure that by the Week 9/10 checkpoint, we have a robust, functioning system that not only demonstrates early success but also provides clear direction for the final refinements before our Week 12 presentations.
