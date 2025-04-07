@@ -1,3 +1,19 @@
 # Project Solar Searcher
+-   Noah Price
+-   Omar Armbruster
+-   Andrew Dean
+-   Col McDermott
 
-# Abstract
+## Abstract
+As the severity of climate change continues to increase and the consumption of energy in the US remains massive, a critical focus of today’s power industry is establishing sources of renewable energy to replace the less climate-friendly alternatives.  Three of the most common renewable energy solutions are solar, hydro, and wind-powered generators.  While these renewable energy sources are proven to be both highly effective and regenerative, they often require a complex set of specific circumstances for construction, (such as geographical location/elements and consistent weather conditions) to function effectively and comparably to traditional, environmentally abrasive methods.  
+
+Focussing on solar energy, we aim to address the problem of locating optimal regions throughout the US to build solar farms for cleaner energy production.  Our general approach to this problem is to determine the predicted energy output of (and possibly corresponding implementation cost) installing a solar farm at a given US location.  Interpreting location-specific characteristics extracted from geographical, topographical, and meteorological (weather) data, we aim to calculate the projected energy production from placing a solar farm (or similar solar-powered operation) anywhere in the US.  
+
+Our primary goal is to leverage several machine learning techniques to assist our success, converting this problem into a regression task with a predictive model.  To measure and evaluate our progress on this project, we strive to implement (most likely employing pre-existing software libraries) and refine a regression model that processes the aforementioned data of a given input and predicts the potential energy production of placing solar energy structures at any analyzed region.  We intend to create a reproducible data processing procedure, construct a usable model, and provide an early-stage tool to help inform and promote decisions about implementing solar energy solutions in the optimal US regions.
+
+## Motivation & Driving Questions
+Establishing renewable and regenerative energy sources is a necessary step in combating global warming.  Our primary motivation for this project stems from our interest in applying our new knowledge of machine learning capabilities and techniques to seek solution steps for a crucial problem surrounding the world.  Our main plan for acquiring data is to combine geographical data from sources like Google Earth as well as the NASA Power Project with large-region weather data (sources yet to be identified). 
+
+There are three underlying questions driving our project:  At this US location, what is predicted energy production (in standard power units) if solar panels are installed?  In general, what US regions will yield the highest solar energy production?  Considering the implementation cost and comparison to existing power industry structures, should solar energy structures be built at this US location/region?
+
+We envision our predictive regression model being used to inform decisions regarding the installment of solar energy systems at various places throughout the US.  Our model could assist in deciding if the implementation of solar power on new, untouched US land (pertaining to energy production systems) is worthwhile or if existing power production methods in certain US regions should be converted into solar energy systems.  Additionally, if the time and scope of this project allow, we could extend our model to be used for similar decisions regarding the other primary renewable energy sources like hydro and wind power.
