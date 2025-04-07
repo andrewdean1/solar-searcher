@@ -35,3 +35,12 @@ Noah: I’m looking forward to learning about algorithms and data pipelines as s
 The most significant potential obstacle in our path to successfully implementing this project is the data. In order to make accurate and meaningful predictions about potential energy output for a theoretical plant, we will need to develop a strong understanding of the factors at play in generating renewable energy. To account for this difficulty, we have already identified several potential datasets, but we have also discussed multiple options for applicable models in this scenario. The optimal features may not be the same for all possible models, so if our data is not yielding the patterns we expected, we can be flexible and experiment with different means of prediction.
 
 Another potential obstacle is compute power. Given that we plan to include a heatmap in our final deliverable, we will need to apply our model to a very wide dataset. To account for this problem, we have access to powerful lab computers in both the computer science and physics departments, on which we can run our most intensive experiments to generate our final reports.
+
+## Ethics Statement
+Our model tackles a subject which is often politicized, as different parties hold different views on climate change and the best approach to stabilizing global resources. Given the importance of developing renewable energy sources, our model does have the potential to cause harm if it exhibits bias. If our model over-predicts energy output in certain areas and under-predicts output in others, application of our results could yield unequal distribution of green energy, which may not be the optimal solution to our energy crisis. Further, if our model predicts overall low outputs, its results could theoretically be used to justify propagation of traditional energy methods such as fossil fuels. 
+
+However, we overall find that our model has the potential to do good, under the following assumptions:
+Renewable energy output can be predicted based on topographical, geological, and other spatial features.
+Developing theoretical means of measurement for green energy will make its implementation more robust.
+The world is a better place when our energy sources are not harmful to the planet.
+
