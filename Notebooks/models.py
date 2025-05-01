@@ -59,30 +59,28 @@ class LM:
         loss_fn = nn.MSELoss()
 
         # optimizer is SGD with momentum
-        optimizer = optim.Adam(self.model.parameters(), **opt_kwargs)
+        optimizer = optim.SGD(self.model.parameters(), lr = 0.001, **opt_kwargs)
 
         losses_train = []
         losses_test = []
         
 
         data_loader_train, data_loader_test = self.preprocess_data(X,y, X_t, y_t)
-        test_loader_iter = iter(data_loader_test)
+        # test_loader_iter = iter(data_loader_test)
         for epoch in range(epochs):
-            for i, data in enumerate(data_loader_train):
+            for data, te_data in zip(data_loader_train, data_loader_test):
                 X, y = data
                 X, y = X.to(self.device), y.to(self.device)
-
+                X_t, y_t = te_data
+                X_t, y_t = X_t.to(self.device), y_t.to(self.device)
                 # clear any accumulated gradients
                 optimizer.zero_grad()
 
                 # compute the loss
                 y_pred = self.model(X)
                 loss = loss_fn(y_pred, y)
-                # X_t, y_t = next(test_loader_iter)
-                # y_test_pred = self.model(X_t)
-                # loss_test = loss_fn(y_test_pred, y_t)
-                ## TODO: Implement Testing Loss 
-                loss_test = loss
+                y_test_pred = self.model(X_t)
+                loss_test = loss_fn(y_test_pred, y_t)
                 # compute gradients and carry out an optimization step
                 loss.backward()
                 optimizer.step()
@@ -103,3 +101,22 @@ class LM:
     def loadModel(self, filepath):
         self.model.load_state_dict(torch.load(filepath, weights_only=False))
         self.model.eval()
+    
+class CNN(LM):
+    def __init__(self,):
+        super().__init__()
+        self.model = self.CNN().to(self.device)
+    class CNN(nn.Module):
+        def __init__(self):
+            super().__init__()
+
+            self.pipeline = nn.Sequential(
+                # nn.Flatten(),
+                nn.Linear(16, 10),
+                ReLU(),
+                nn.Linear(10, 6),
+                ReLU(),
+                nn.Linear(6,2),
+                ReLU(),
+                nn.Linear(2,1)
+            )

@@ -3,4 +3,5 @@
 *.pdf
 *.nc
 *.csv
+*.tar
 /Data
