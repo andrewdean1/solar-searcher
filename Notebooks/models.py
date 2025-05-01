@@ -23,7 +23,7 @@ class LM:
 
             self.pipeline = nn.Sequential(
                 # nn.Flatten(),
-                nn.Linear(16, 10),
+                nn.Linear(12, 10),
                 ReLU(),
                 nn.Linear(10, 6),
                 ReLU(),
