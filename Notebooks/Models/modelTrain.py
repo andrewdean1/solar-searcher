@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import torch 
-from models import LM
+from Notebooks.Models.models import LM
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 
 def main():
     
-    data = pd.read_csv("../Data/csvs/full_data.csv")
+    data = pd.read_csv("../../Data/csvs/full_data.csv")
     data  = data.drop('irradiance', axis = 1)
     y = data['pvo']
     X = data.drop('pvo', axis = 1)
