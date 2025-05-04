@@ -99,7 +99,7 @@ class LM:
         torch.save(self.model.state_dict(), filepath)
         print('Saved model at {}'.format(filepath))
     def loadModel(self, filepath):
-        self.model.load_state_dict(torch.load(filepath, weights_only=False))
+        self.model.load_state_dict(torch.load(filepath, map_location=torch.device('cpu')))
         self.model.eval()
     
 class CNN(LM):
