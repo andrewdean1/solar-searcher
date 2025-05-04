@@ -63,3 +63,11 @@ By Week 6:
 
 
 This phased approach will ensure that by the Week 9/10 checkpoint, we have a robust, functioning system that not only demonstrates early success but also provides clear direction for the final refinements before our Week 12 presentations.
+
+## Required File Structure
+
+To run the code in this repository, you will need a .env file in the Data Sources directory with the following structure:
+
+```
+GOOGLE_MAPS_API_KEY = [your google maps API key]
+```
