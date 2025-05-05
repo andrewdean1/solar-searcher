@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import sys
+import os
+sys.path.append(os.path.abspath('../Models'))
 
 import torch 
-from Notebooks.Models.models import LM
+from models import LM
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -16,6 +19,7 @@ def main():
     X = data.drop('pvo', axis = 1)
     for col in X.columns:
         X[col] = (X[col] - X[col].mean())/X[col].std()
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3)
 
     X_train = torch.tensor(X_train.values, dtype = torch.float32)
@@ -23,8 +27,14 @@ def main():
     X_test = torch.tensor(X_test.values, dtype = torch.float32)
     y_test = torch.tensor(y_test.values, dtype = torch.float32)
 
+    # Also standardize y since mse is sensitive to standardization
+    # y_mean = y_train.mean()
+    # y_std = y_train.std()
+    # y_train = (y_train - y_mean) / y_std
+   #  y_test = (y_test - y_mean) / y_std
+
     model = LM()
-    model.train(X_train, y_train, X_test, y_test, epochs = 1000)
+    model.train(X_train, y_train, X_test, y_test, epochs = 20)
 
     tr_loss, te_loss = model.loss()
     tr = np.array(tr_loss).reshape(-1,1)

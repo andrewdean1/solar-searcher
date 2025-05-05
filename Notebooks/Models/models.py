@@ -1,5 +1,6 @@
 import torch
 import pandas as pd
+import numpy as np
 from matplotlib import pyplot as plt
 import torch.nn as nn
 from torch.nn import Conv2d, MaxPool2d, Parameter
@@ -54,12 +55,11 @@ class LM:
     
 
     def train(self, X, y, X_t, y_t, epochs = 10, **opt_kwargs):
-
         # loss function is cross-entropy (multiclass logistic)
         loss_fn = nn.MSELoss()
 
         # optimizer is SGD with momentum
-        optimizer = optim.SGD(self.model.parameters(), lr = 0.001, **opt_kwargs)
+        optimizer = optim.SGD(self.model.parameters(), lr = 0.01, **opt_kwargs)
 
         losses_train = []
         losses_test = []
@@ -68,29 +68,33 @@ class LM:
         data_loader_train, data_loader_test = self.preprocess_data(X,y, X_t, y_t)
         # test_loader_iter = iter(data_loader_test)
         for epoch in range(epochs):
-            for data, te_data in zip(data_loader_train, data_loader_test):
-                X, y = data
-                X, y = X.to(self.device), y.to(self.device)
-                X_t, y_t = te_data
-                X_t, y_t = X_t.to(self.device), y_t.to(self.device)
-                # clear any accumulated gradients
+            self.model.train()
+            for data in data_loader_train:
+                X_batch, y_batch = data
+                X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
                 optimizer.zero_grad()
-
-                # compute the loss
-                y_pred = self.model(X)
-                loss = loss_fn(y_pred, y)
-                y_test_pred = self.model(X_t)
-                loss_test = loss_fn(y_test_pred, y_t)
-                # compute gradients and carry out an optimization step
+                y_pred = self.model(X_batch)
+                loss = loss_fn(y_pred, y_batch.unsqueeze(1))
                 loss.backward()
                 optimizer.step()
+
+                # compute the loss
+            self.model.eval()
+            with torch.no_grad():
+                test_losses = []
+                for X_batch, y_batch in data_loader_test:
+                    X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
+                    y_pred = self.model(X_batch)
+                    test_loss = loss_fn(y_pred, y_batch.unsqueeze(1))
+                    test_losses.append(test_loss.item())
+                loss_test = np.mean(test_losses)
             print('Epoch: {} Loss: {}'.format(epoch + 1, loss))
             losses_train.append(loss.item())
             losses_test.append(loss_test.item())
         self.losses = losses_train
         self.test_loss = losses_test
     
-    def predict(self, X):
+    def predict(self, X, unscale=True):
         return self.model(X)
 
     def loss(self):
