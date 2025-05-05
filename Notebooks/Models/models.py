@@ -1,30 +1,43 @@
-import torch
-import pandas as pd
-import numpy as np
-from matplotlib import pyplot as plt
-import torch.nn as nn
+from sklearn.model_selection import train_test_split
 from torch.nn import Conv2d, MaxPool2d, Parameter
+from sklearn.preprocessing import StandardScaler
+from matplotlib import pyplot as plt
 from torch.nn.functional import relu
 import torch.optim as optim
 from torch.nn import ReLU
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-plt.style.use('seaborn-v0_8-whitegrid')
+import torch.nn as nn
+import pandas as pd
+import numpy as np
+import torch
 
-
+# Main Linear Regression class
 class LM:
-    def __init__(
-            self,
-    ):
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model = self.LinearModel().to(self.device)
+    
+    def __init__(self, all_feats = False): # "all_feats" arg. indicates if all or a subset of features are used
+        
+        # For running on GPU
+        self.device = "cuda" if torch.cuda.is_available() else "cpu" 
+        
+        # Initializing/locating a model
+        self.model = self.LinearModel(all_feats).to(self.device) # Pass feature usage info to implicit linear model object
+    
+    # Linear Model sub-class
     class LinearModel(nn.Module):
-        def __init__(self):
+        
+        def __init__(self, all_feats = False): # "all_feats" arg. passed from above
+            
+            # Initialize nn.Module object
             super().__init__()
 
+            # Matrix alignment depending on if all features are used
+            if all_feats:
+                init_feats = 13
+            else:
+                init_feats = 12
+
+            # Basic linear model pipeline
             self.pipeline = nn.Sequential(
-                # nn.Flatten(),
-                nn.Linear(12, 10),
+                nn.Linear(init_feats, 10),
                 ReLU(),
                 nn.Linear(10, 6),
                 ReLU(),
@@ -33,19 +46,23 @@ class LM:
                 nn.Linear(2,1)
             )
 
-        # this is the customary name for the method that computes the scores
-        # the loss is usually computed outside the model class during the training loop
+        # Method to computes the scores/predictions
         def forward(self, x):
             return self.pipeline(x)
     
+    # Data preprocessing/batching
     def preprocess_data(self, X_train, y_train, X_test, y_test):
-        ## TODO: Input data scaling?
+        
+        ## TODO: Incorporate data scaling or feature maps?
+        
+        # Training data batches
         data_loader_train = torch.utils.data.DataLoader(
         torch.utils.data.TensorDataset(X_train, y_train),
         batch_size = 32,
         shuffle = True
         )
 
+        # Testing data batches
         data_loader_test = torch.utils.data.DataLoader(
             torch.utils.data.TensorDataset(X_test, y_test),
             batch_size = 32,
@@ -53,34 +70,51 @@ class LM:
         )
         return data_loader_train, data_loader_test
     
-
+    # Model training method
     def train(self, X, y, X_t, y_t, epochs = 10, **opt_kwargs):
-        # loss function is cross-entropy (multiclass logistic)
+        
+        # Loss function is Mean-Squared-Error
         loss_fn = nn.MSELoss()
 
-        # optimizer is SGD with momentum
+        # Optimizer is SGD with momentum
         optimizer = optim.SGD(self.model.parameters(), lr = 0.01, **opt_kwargs)
 
+        # Bookkeeping arrays
         losses_train = []
         losses_test = []
         
-
-        data_loader_train, data_loader_test = self.preprocess_data(X,y, X_t, y_t)
-        # test_loader_iter = iter(data_loader_test)
+        # Batching the data
+        data_loader_train, data_loader_test = self.preprocess_data(X, y, X_t, y_t)
+        
+        # Train over n epochs
         for epoch in range(epochs):
+            
+            # Initialize the model weights?
             self.model.train()
+
+            # Iterate through each data batch
             for data in data_loader_train:
+                
+                # Locate data batch
                 X_batch, y_batch = data
                 X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
+                
+                # Reset gradients
                 optimizer.zero_grad()
+                
+                # Compute model predictions and loss
                 y_pred = self.model(X_batch)
                 loss = loss_fn(y_pred, y_batch.unsqueeze(1))
+                
+                # Compute gradients and optimize
                 loss.backward()
                 optimizer.step()
 
-                # compute the loss
+            # Record current model loss
             self.model.eval()
             with torch.no_grad():
+                
+                # Compute test loss
                 test_losses = []
                 for X_batch, y_batch in data_loader_test:
                     X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
@@ -88,34 +122,54 @@ class LM:
                     test_loss = loss_fn(y_pred, y_batch.unsqueeze(1))
                     test_losses.append(test_loss.item())
                 loss_test = np.mean(test_losses)
-            print('Epoch: {} Loss: {}'.format(epoch + 1, loss))
+
+            # Store and display current training loss
+            print('Epoch: {} | Loss: {}'.format(epoch + 1, loss))
             losses_train.append(loss.item())
             losses_test.append(loss_test.item())
+
+        # Store training/testing losses    
         self.losses = losses_train
         self.test_loss = losses_test
     
+    # Additional method to compute model predictions
     def predict(self, X, unscale=True):
         return self.model(X)
 
+    # Method to compute model loss
     def loss(self):
         return self.losses, self.test_loss
+    
+    # Method to store model waits
     def saveModel(self, filepath):
         torch.save(self.model.state_dict(), filepath)
         print('Saved model at {}'.format(filepath))
+    
+    # Method to retrieve stored model
     def loadModel(self, filepath):
         self.model.load_state_dict(torch.load(filepath, map_location=torch.device('cpu')))
         self.model.eval()
     
+# Linear model enhanced with a CNN
 class CNN(LM):
-    def __init__(self,):
+    
+    def __init__(self):
+        
+        # Initialize LM object
         super().__init__()
+
+        # Initializing/locating a model
         self.model = self.CNN().to(self.device)
+
     class CNN(nn.Module):
+        
         def __init__(self):
+            
+            # Initialize nn.Module object
             super().__init__()
 
+            # Basic CNN pipeline
             self.pipeline = nn.Sequential(
-                # nn.Flatten(),
                 nn.Linear(16, 10),
                 ReLU(),
                 nn.Linear(10, 6),
