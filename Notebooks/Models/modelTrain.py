@@ -27,12 +27,6 @@ def main():
     X_test = torch.tensor(X_test.values, dtype = torch.float32)
     y_test = torch.tensor(y_test.values, dtype = torch.float32)
 
-    # Also standardize y since mse is sensitive to standardization
-    # y_mean = y_train.mean()
-    # y_std = y_train.std()
-    # y_train = (y_train - y_mean) / y_std
-   #  y_test = (y_test - y_mean) / y_std
-
     model = LM()
     model.train(X_train, y_train, X_test, y_test, epochs = 20)
 
