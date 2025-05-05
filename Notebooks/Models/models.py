@@ -9,6 +9,7 @@ import torch.nn as nn
 import pandas as pd
 import numpy as np
 import torch
+import sys
 
 # Main Linear Regression class
 class LM:
@@ -71,7 +72,7 @@ class LM:
         return data_loader_train, data_loader_test
     
     # Model training method
-    def train(self, X, y, X_t, y_t, epochs = 10, **opt_kwargs):
+    def train(self, X, y, X_t, y_t, epochs = 10, verbose = True, **opt_kwargs):
         
         # Loss function is Mean-Squared-Error
         loss_fn = nn.MSELoss()
@@ -79,7 +80,7 @@ class LM:
         # Optimizer is SGD with momentum
         optimizer = optim.SGD(self.model.parameters(), lr = 0.01, **opt_kwargs)
 
-        # Bookkeeping arrays
+        # Bookkeeping arrays and min-loss var
         losses_train = []
         losses_test = []
         
@@ -89,7 +90,7 @@ class LM:
         # Train over n epochs
         for epoch in range(epochs):
             
-            # Initialize the model weights?
+            # Set model back to train mode
             self.model.train()
 
             # Iterate through each data batch
@@ -103,30 +104,37 @@ class LM:
                 optimizer.zero_grad()
                 
                 # Compute model predictions and loss
-                y_pred = self.model(X_batch)
-                loss = loss_fn(y_pred, y_batch.unsqueeze(1))
+                y_pred_tr = self.model(X_batch)
+                loss = loss_fn(y_pred_tr, y_batch.unsqueeze(1))
                 
                 # Compute gradients and optimize
                 loss.backward()
                 optimizer.step()
 
-            # Record current model loss
-            self.model.eval()
-            with torch.no_grad():
-                
-                # Compute test loss
-                test_losses = []
-                for X_batch, y_batch in data_loader_test:
-                    X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
-                    y_pred = self.model(X_batch)
-                    test_loss = loss_fn(y_pred, y_batch.unsqueeze(1))
-                    test_losses.append(test_loss.item())
-                loss_test = np.mean(test_losses)
+            # Record current model training/testing loss
+            self.model.eval() # Set model to evaluation mode
+            y_pred_tr = self.model(X)
+            y_pred_te = self.model(X_t)
+            loss_tr = loss_fn(y_pred_tr, y.unsqueeze(1))
+            loss_te = loss_fn(y_pred_te, y_t.unsqueeze(1))
+
+            if False:
+                with torch.no_grad():
+                    
+                    # Compute test loss
+                    test_losses = []
+                    for X_batch, y_batch in data_loader_test:
+                        X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
+                        y_pred = self.model(X_batch)
+                        test_loss = loss_fn(y_pred, y_batch.unsqueeze(1))
+                        test_losses.append(test_loss.item())
+                    loss_test = np.mean(test_losses)
 
             # Store and display current training loss
-            print('Epoch: {} | Loss: {}'.format(epoch + 1, loss))
-            losses_train.append(loss.item())
-            losses_test.append(loss_test.item())
+            losses_train.append(loss_tr.item())
+            losses_test.append(loss_te.item())
+            if verbose:
+                print('Epoch: {} | Loss: {}'.format(epoch + 1, loss_te.item()))
 
         # Store training/testing losses    
         self.losses = losses_train
