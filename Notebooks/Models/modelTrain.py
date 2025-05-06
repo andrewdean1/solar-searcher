@@ -48,14 +48,14 @@ def main():
     # Initialize and train linear regression model (w/out irr)
     print("Model 1:")
     model1 = LM()
-    model1.train(X_train_no_irr, y_train_no_irr, X_test_no_irr, y_test_no_irr, epochs = 5) # Increase number of epochs
+    model1.train(X_train_no_irr, y_train_no_irr, X_test_no_irr, y_test_no_irr, epochs = 100) # Increase number of epochs
 
     print("\n----------\n")
 
     # Initialize and train linear regression model (w/ irr)
     print("Model 2:")
     model2 = LM(all_feats = True)
-    model2.train(X_train_irr, y_train_irr, X_test_irr, y_test_irr, epochs = 5) # Increase number of epochs
+    model2.train(X_train_irr, y_train_irr, X_test_irr, y_test_irr, epochs = 100) # Increase number of epochs
 
     # Compute model train/test loss (w/out irr)
     tr_loss_no_irr, te_loss_no_irr = model1.loss()
@@ -68,12 +68,12 @@ def main():
     te_irr = np.array(te_loss_irr).reshape(-1,1)
     
     # Store model weights and train/test loss (w/out irr)
-    np.savetxt('../../Data/model/loss_no_irr.txt', np.concatenate((tr_no_irr, te_no_irr), axis = 1))
-    model1.saveModel('../../Data/model/LM_no_irr.pt.tar')
+    np.savetxt('../../Data/model/loss_no_irr_relu.txt', np.concatenate((tr_no_irr, te_no_irr), axis = 1))
+    model1.saveModel('../../Data/model/LM_no_irr_relu.pt.tar')
 
     # Store model weights and train/test loss (w/ irr)
-    np.savetxt('../../Data/model/loss_irr.txt', np.concatenate((tr_irr, te_irr), axis = 1))
-    model2.saveModel('../../Data/model/LM_no_irr.pt.tar')
+    np.savetxt('../../Data/model/loss_irr_relu.txt', np.concatenate((tr_irr, te_irr), axis = 1))
+    model2.saveModel('../../Data/model/LM_irr_relu.pt.tar')
     
 if __name__ == "__main__":
     main()

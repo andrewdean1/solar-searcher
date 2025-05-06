@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from matplotlib import pyplot as plt
 from torch.nn.functional import relu
 import torch.optim as optim
-from torch.nn import ReLU
+from torch.nn import ReLU, Sigmoid
 import torch.nn as nn
 import pandas as pd
 import numpy as np
@@ -113,6 +113,7 @@ class LM:
 
             # Record current model training/testing loss
             self.model.eval() # Set model to evaluation mode
+            X, X_t, y, y_t = X.to(self.device), X_t.to(self.device), y.to(self.device), y_t.to(self.device)
             y_pred_tr = self.model(X)
             y_pred_te = self.model(X_t)
             loss_tr = loss_fn(y_pred_tr, y.unsqueeze(1))
