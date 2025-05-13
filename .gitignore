@@ -4,4 +4,4 @@
 *.nc
 *.csv
 *.tar
-/Data
+*.txt

@@ -1,0 +1,1 @@
+### This directory contains `.tif` files for the GHI data grathered from NREL.
