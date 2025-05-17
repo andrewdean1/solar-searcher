@@ -159,31 +159,3 @@ class LM:
         self.model.load_state_dict(torch.load(filepath, map_location=torch.device('cpu')))
         self.model.eval()
     
-# Linear model enhanced with a CNN
-class CNN(LM):
-    
-    def __init__(self):
-        
-        # Initialize LM object
-        super().__init__()
-
-        # Initializing/locating a model
-        self.model = self.CNN().to(self.device)
-
-    class CNN(nn.Module):
-        
-        def __init__(self):
-            
-            # Initialize nn.Module object
-            super().__init__()
-
-            # Basic CNN pipeline
-            self.pipeline = nn.Sequential(
-                nn.Linear(16, 10),
-                ReLU(),
-                nn.Linear(10, 6),
-                ReLU(),
-                nn.Linear(6,2),
-                ReLU(),
-                nn.Linear(2,1)
-            )
